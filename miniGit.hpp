@@ -44,6 +44,7 @@ class miniGit{
 		void removeFile();
 		void checkOut();
 		void commit();
+		
 
 		//Hash table search
 		//
