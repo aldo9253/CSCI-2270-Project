@@ -1,13 +1,13 @@
-all: Driver
+all: driver
 
-Driver: Driver.o MovieTree.o
-	g++ -std=c++11 -Wall -g Driver.o MovieTree.o -o main
+driver: driver.o miniGit.o
+	g++ -std=c++11 -Wall -g driver.o miniGit.o -o main
 
-Driver.o: Driver.cpp
-	g++ -std=c++11 -Wall -g -c Driver.cpp
+driver.o: driver.cpp
+	g++ -std=c++11 -Wall -g -c driver.cpp
 
-MovieTree.o: MovieTree.cpp
-	g++ -std=c++11 -Wall -g -c MovieTree.cpp
+miniGit.o: miniGit.cpp
+	g++ -std=c++11 -Wall -g -c miniGit.cpp
 
 clean:
-	rm -f main *.o
+	rm -f driver *.o

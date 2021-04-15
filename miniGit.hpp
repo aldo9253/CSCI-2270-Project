@@ -40,13 +40,16 @@ class miniGit{
 	public:
 		miniGit();
 		~miniGit();
-		void addFile();
-		void removeFile();
-		void checkOut();
-		void commit();
+		void addFile(); // add nodes to point to files/filename
+		void removeFile(); // delete node from singly linked list
+		void checkOut(); // overwrite local files with files in repo
+		void commit(); // create new node in double linked list, and compare, update version #'s, etc...
 		
-
-		//Hash table search
+		// Some basic functions to traverse the doubly linked list
+		// " " singly linked list
+		// Some function to compare files (for version info)
+		
+		// Hash table search // for phase two
 		//
 };
 
