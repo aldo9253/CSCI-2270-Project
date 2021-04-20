@@ -28,17 +28,18 @@ struct singlyNode{
 
 struct doublyNode{
 	int commitNumber;
-	singlyNode * head;
-	doublyNode * previous;
+	singlyNode * fileHead; //fileHead
+	doublyNode * prev;
 	doublyNode * next;
 }; // end doublyNode	
 
 class miniGit{
 	private:
-		doublyNode * head;
+		doublyNode * commitHead;
 	public:
 		miniGit();
 		~miniGit();
+        void init();
 		void addFile(); // add nodes to point to files/filename
 		void removeFile(); // delete node from singly linked list
 		void checkOut(); // overwrite local files with files in repo
