@@ -5,12 +5,13 @@
 
 #include "miniGit.hpp"
 #include<iostream>
+#include<string>
+
 using namespace std;
 
-int main() {
-
+void printMenu(){
 	//print menu
-	cout << "Welcome to miniGit" << endl;
+	cout << endl;
 	cout << "Please press: " << endl;
 	cout <<  "1: to initialize the repository" << endl;
 	cout <<  "2: to add a file to the repository" << endl;
@@ -18,35 +19,45 @@ int main() {
 	cout <<  "4: to initialize the repository" << endl;
 	cout <<  "5: to initialize the repository" << endl;
 	cout <<  "6: to initialize the repository" << endl;
-	cout <<  "x: to exit the program" << endl;
+	cout <<  "x: to exit the program" << endl << endl;
+} // end printMenu
 
+int main() {
+	cout << endl <<  "Welcome to miniGit" << endl << endl;
+	printMenu();
 	//cout << input << endl;
 	bool exit = true;
 	char input; //char will take the 1st char, string takes the 1st word, only returns on enter
 	//while (input != 'x') {
 	while (exit) {
-
+		
 		// Take user input;
 		cin >> input;
 		switch(input) {
 			case '1':
 				cout << "You pressed '1' " << endl;
+				printMenu();
 				// put function call here
 				break;
 			case '2':
 				cout << "You pressed '2' " << endl;
+				printMenu();
 				break;
 			case '3':
 				cout << "You pressed '3' " << endl;
+				printMenu();
 				break;
 			case '4':
 				cout << "You pressed '4' " << endl;
+				printMenu();
 				break;
 			case '5':
 				cout << "You pressed '5' " << endl;
+				printMenu();
 				break;
 			case '6':
 				cout << "You pressed '6' " << endl;
+				printMenu();
 				break;
 			case 'x': 
 				cout << "Come again soon" << endl;
