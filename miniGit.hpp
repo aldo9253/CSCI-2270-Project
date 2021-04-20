@@ -11,15 +11,20 @@
 // 	
 // 	See the Project document for specifics
 
-#ifdef miniGet_HPP
-#define miniGet_HPP
+//#ifdef miniGet_HPP
+//#define miniGet_HPP
 #include<vector>
 #include<iostream>
-#include<fstream> // will need for file stuff
-#include<cstream> // what do?
+#include<fstream> // will need for file stuff?
 #include<sstream> // what do?
 
 using namespace std;
+
+struct singlyNode{
+	string fileName; 	// Name of local file
+	string fileVersion;	// Name of file in the .minigit folder
+	singlyNode * next;
+}; // end doublyNode	
 
 struct doublyNode{
 	int commitNumber;
@@ -28,15 +33,9 @@ struct doublyNode{
 	doublyNode * next;
 }; // end doublyNode	
 
-struct singlyNode{
-	string fileName; 	// Name of local file
-	string fileVersion;	// Name of file in the .minigit folder
-	singlyNode * next;
-}; // end doublyNode	
-
 class miniGit{
 	private:
-		doubleNode * head;
+		doublyNode * head;
 	public:
 		miniGit();
 		~miniGit();
