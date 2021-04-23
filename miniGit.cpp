@@ -3,32 +3,38 @@
 // miniGit.cpp
 //
 
+// 		TODO:
+// won't remove file
+// make checkout
+// commit bugs (is the doublenode actually deep copying) (copying the singly nodes backwards)
+// 		Write a test function to print these out from fileHead to null (cout name)
 
 #include "miniGit.hpp"
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <experimental/filesystem>
+#include <filesystem>
 
 using namespace std;
-namespace fs = std::experimental::filesystem;
+//namespace fs = std::experimental::filesystem;
+namespace fs = filesystem;
 
 miniGit::miniGit(){
-  //fs::remove_all(".miniGit");
-  //fs::create_directory(".miniGit");
+  fs::remove_all(".miniGit");
+  fs::create_directory(".miniGit");
 } // end constructor
 
 miniGit::~miniGit(){
-  //fs::remove_all(".miniGit");
+  fs::remove_all(".miniGit");
 } // end destructor
 
-void miniGit:: init(){
+void miniGit::init(){
   commitHead = new doublyNode;
   commitHead->next = 0;
   commitHead->prev = 0;
   commitHead->fileHead = 0;
-  //commitHead->fileVersion = 0;
+  commitHead->commitNumber = 0;
   //
 }
 
@@ -76,8 +82,8 @@ void miniGit::addFile(){
         } else {
             cout << "File doesn't exist" << endl;
         }
-
-
+	// this is only creating the node.
+	// not actually creating the file
     return;
     }
 
@@ -135,17 +141,15 @@ void file_copy(string f1name, string f2name) {
     c1 = f1.get();
     if(c1 == EOF)
     {
-      break;
-      f2 << c1;
+      	break;
+    	f1.close();
+    	f2.close();
     }
-    f1.close();
-    f2.close();
+    f2 << c1;
   }
-  
 } // end file_copyShell
 
-bool is_equal(string f1name, string f2name)
-{ 
+bool is_equal(string f1name, string f2name) { 
     //This function will detect even a difference in an extra line at the end
     ifstream f1(f1name), f2(f2name);
     char c1, c2;
@@ -167,35 +171,72 @@ bool is_equal(string f1name, string f2name)
     return true;
 } // end is_equal
 
-
 void miniGit::checkOut(){
-    
+   file_copy("makefile", "test"); 
 } // end checkOut
 
 void miniGit::commit(){
-    //TEST ME
+    // This is not iterating through all files, and not "deep" copying
+    
     singlyNode * curr = commitHead->fileHead;
+
     while(curr != nullptr){
+
         string fileName = curr->fileName + curr->fileVersion; //we will need to copy/save files in this format as well. (f1.txt01)
         string fileDest = ".miniGit/"+fileName;
-        if(fileExist(fileName)){
+
+	cout << fileName << endl;
+        //if(fileExist(".miniGit/" + fileName)){
+        if(fileExist(fileDest)){
+	    cout << " file exists " << endl;
             if(is_equal(curr->fileName, fileDest)){ //file is unchanged
                 break; // make sure this doesn't break too far
-            } else {
+            } else { // if exists but has been changed
                 //curr->fileVersion ++; //increment file version
-                curr->fileVersion = to_string(stoi(curr->fileVersion) + 1);
+		cout << "old file version: " << curr->fileVersion << endl;
+                curr->fileVersion = to_string(stoi(curr->fileVersion) + 1); // check for the 0 case
+		cout << "new file version: " << curr->fileVersion << endl;
+                //curr->fileVersion = 0;
                 fileName = curr->fileName + curr->fileVersion;
                 fileDest = ".miniGit/"+fileName;
                 //curr->filename = filename; // see comments below.
+		
                 file_copy(curr->fileName, fileDest);
-                // is the copy before or after the file_copy?
-                // should we update curr->fileName to include the ver #?
             }
-        } else {
+        } else { // the file doesn't exist
+ 	    cout << "File didn't exist" << endl;
             file_copy(curr->fileName, fileDest);
         }
+
         curr = curr->next;
+
     } // end while
+
+    singlyNode * temp = commitHead->fileHead; 
+    doublyNode * head = new doublyNode;
+	head->commitNumber = commitHead->commitNumber + 1;
+    commitHead -> next = head;
+    head->prev = commitHead;
+    commitHead = head; // wrong
+
+	//cout << commitHead->commitNumber << endl;
+	//cout << commitHead->prev->commitNumber << endl;
+	
+    while(temp != nullptr){
+        singlyNode* newFile = new singlyNode();
+        newFile->fileName = temp->fileName;
+        newFile->fileVersion = temp->fileVersion;
+        newFile->next = commitHead->fileHead;   
+        commitHead->fileHead = newFile;  
+		//cout << temp << endl;
+		temp = temp->next;
+    } // end deep copy
+
+	// there is some minor debugging to do here
+	cout << commitHead->fileHead << endl;
+	cout << commitHead->fileHead->fileName << endl;
+	cout << commitHead->prev->fileHead << endl;
+	cout << commitHead->prev->fileHead->fileName << endl;
 
     // traverse singly list
     // for all files, check wether the fileVersion exists
@@ -211,7 +252,8 @@ void miniGit::commit(){
         // do a deep copy of the SLL from the prev node
         // increment commit #
 
-
+    // deep copy
+    //
 } // end checkOut
 // we should make a subroutine for the deep copy
 // fileName = f1.txt -> .miniGit/f1.txt01 (.version)

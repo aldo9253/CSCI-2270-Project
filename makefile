@@ -11,3 +11,5 @@ miniGit.o: miniGit.cpp
 
 clean:
 	rm -f driver *.o
+# ad
+
