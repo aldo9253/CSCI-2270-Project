@@ -36,14 +36,16 @@ struct doublyNode{
 class miniGit{
 	private:
 		doublyNode * commitHead;
+		doublyNode * checkHead;
 	public:
 		miniGit();
 		~miniGit();
-        void init();
+        	void init();
 		void addFile(); // add nodes to point to files/filename
 		void removeFile(); // delete node from singly linked list
 		void checkOut(); // overwrite local files with files in repo
 		void commit(); // create new node in double linked list, and compare, update version #'s, etc...
+		void printSingly(); // create new node in double linked list, and compare, update version #'s, etc...
 		
 		// Some basic functions to traverse the doubly linked list
 		// " " singly linked list
