@@ -13,24 +13,26 @@ void printMenu(){
 	//print menu
 	cout << endl;
 	cout << "Please press: " << endl;
-	cout <<  "1: to add a file" << endl;
-	cout <<  "2: to remove a file" << endl;
-	cout <<  "3: to commit" << endl;
-	cout <<  "4: to checkout" << endl;
+	cout <<  "'1' to add a file" << endl;
+	cout <<  "'2' to remove a file" << endl;
+	cout <<  "'3' to commit" << endl;
+	cout <<  "'4' to checkout" << endl;
 	//cout <<  "5: to checkOut" << endl;
 	//cout <<  "6: to print Singly Nodes" << endl;
-	cout <<  "x: to exit the program" << endl << endl;
+	cout <<  "'x' to exit the program" << endl << endl;
 } // end printMenu
 
 int main() {
-	cout << endl <<  "Welcome to miniGit" << endl << endl;
+	cout << endl <<  "Welcome to miniGit" << endl;
+	cout << "	by Alex Doner & E.O. Rafelson " << endl << endl;
 	//printMenu();
 	//cout << input << endl;
-	cout << "Press 0 to initialize the repository" << endl;
+	cout << "Press '0' to initialize the repository" << endl;
+	cout << "Press 'x' to exit program" << endl << endl;
 	bool exit = true;
 	bool init = false;
 	char input; //char will take the 1st char, string takes the 1st word, only returns on enter
-    miniGit * repo = new miniGit;
+	miniGit * repo = new miniGit;
 	while (exit) {
 		// Take user input;
 		cin >> input;
@@ -46,20 +48,28 @@ int main() {
                 printMenu();
 				break;
 			case '1':
-                repo->addFile();
-                printMenu();
+				if(init) {
+                	repo->addFile();
+                	printMenu();
+				}
 				break;
 			case '2':
-                repo->removeFile();
-                printMenu();
+				if(init) {
+                	repo->removeFile();
+                	printMenu();
+				}
 				break;
 			case '3':
-				repo->commit();
-				printMenu();
+				if(init) {
+					repo->commit();
+					printMenu();
+				}
 				break;
 			case '4':
-				repo->checkOut();
-				printMenu();
+				if(init) {
+					repo->checkOut();
+					printMenu();
+				}
 				break;
 			//case '5':
 				//cout << "You pressed '5' " << endl;
@@ -72,12 +82,12 @@ int main() {
 				//printMenu();
 				//break;
 			case 'x': 
-				cout << "Come again soon" << endl;
+				cout << "Come again soon" << endl << endl;
 				exit  = false;
 				repo->~miniGit();
 				return 0;
 			default:
-				cout << "Please select an appropriate option." << endl;
+				cout << "Please select an appropriate option." << endl << endl;
 		} // end switch
 	} // end while
 	return 0;
