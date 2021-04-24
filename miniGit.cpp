@@ -1,11 +1,6 @@
 // Alex Doner & E.O Rafelson
 // CSCSI 2270 Project
 // miniGit.cpp
-//
-
-// 		TODO:
-// won't remove file //further testing
-// make checkout
 
 #include "miniGit.hpp"
 #include <iostream>
@@ -15,7 +10,6 @@
 #include <filesystem>
 
 using namespace std;
-//namespace fs = std::experimental::filesystem;
 namespace fs = filesystem;
 
 miniGit::miniGit(){
@@ -49,14 +43,15 @@ void miniGit::init(){
 //some helper functions
 string getFileName(){
     string name;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    //cin.ignore(numeric_limits<streamsize>::max(), '\n'); // this caused problems
     getline (cin, name);
+	cout << "string: " << name << endl;
     return name;
 } // end getFileName
 
 string getCommitNum(){
     string name;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // this may need to be removed
     getline (cin, name);
     return name;
 } // end getcommitnum
@@ -86,7 +81,8 @@ void miniGit::addFile(){
 	} else {
     	cout << "Please type the name of the file you wish to ADD" << endl;
     	cout << " or type 'cancel' to go back to menu" << endl;
-        string fileName = getFileName();
+		string fileName;
+        fileName = getFileName();
         singlyNode * curr = commitHead->fileHead;
         while (curr!=0)
         {
