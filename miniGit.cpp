@@ -42,7 +42,7 @@ void miniGit::init(){
 //some helper functions
 string getFileName(){
     string name;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // this caused problems
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
     getline (cin, name);
 	//cout << "string: " << name << endl;
     return name;
@@ -50,10 +50,18 @@ string getFileName(){
 
 string getCommitNum(){
     string name;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // this may need to be removed
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
     getline (cin, name);
     return name;
 } // end getcommitnum
+
+
+bool isNumber(const string& str){ // checks if a string is a number, used in checkout to make sure we get valid entry
+    for (int i = 0; i < str.length(); i++) {
+        if (isdigit(str[i]) == false) return false;
+    }
+    return true;
+} // end isnumber
 
 bool fileExist(string fileName){
     ifstream ifile;
@@ -199,27 +207,28 @@ bool is_equal(string f1name, string f2name) {
 } // end is_equal
 
 void miniGit::checkOut(){
-	// ADD WARNING
-	// DISALLOW ALL OPERATIONS IF COMMIT NUMBERS DIFFER
-	// compare doubly heads ("checkhead")
+
 
 	cout << "WARNING: The checkout function will overwrite local changes." << endl;
 	cout << "Please enter '-1' to return to safety" << endl;
 	cout << "Please enter a commit number" << endl;
 	string commitNum = getCommitNum();
+	if (!isNumber(commitNum)) 
+	{
+		cout << "Please enter a valid commit number and try again." << endl; 
+		return;
+	}
 	int commitNumber = stoi(commitNum);
 	cout << "commit # " << commitNumber << endl;
 
 	if(commitNumber > commitHead->commitNumber || commitNumber < 1){
-		//cout << "You were an idiot" << endl; // fix this for submission
 		if(commitNumber == -1) {
 			cout << endl << "Returning to safety" << endl;
 			return;
 		}
-		cout << "Please enter a valid commit number and try again." << endl; // fix this for submission
+		cout << "Please enter a valid commit number and try again." << endl; 
 		return;
 	} else {
-		//doublyNode * checkHead = commitHead;
 		checkHead = commitHead;
 		while(checkHead->commitNumber >= 0) {
 			if(checkHead->commitNumber == commitNumber)
@@ -231,9 +240,7 @@ void miniGit::checkOut(){
 		singlyNode * curr = checkHead->fileHead;
 		while(curr != nullptr){
 			string fileSource = ".miniGit/" + curr->fileName + curr->fileVersion;
-			//cout << "File Source: " << fileSource << endl; // debugging
 			string fileDest = curr->fileName;
-			//cout << "File Dest: " << fileDest << endl; // debugging
 			file_copy(fileSource, fileDest);
 			curr = curr->next;
 		} // end while
@@ -263,7 +270,6 @@ void miniGit::commit(){
     while(curr != nullptr){
         string fileName = curr->fileName + curr->fileVersion; //we will need to copy/save files in this format as well. (f1.txt01)
         string fileDest = ".miniGit/"+fileName;
-		//cout << fileName << endl;
         if(fileExist(fileDest)){
 	    //cout << " file exists " << endl;
             if(is_equal(curr->fileName, fileDest)){ //file is unchanged
@@ -309,33 +315,12 @@ void miniGit::commit(){
         newFile->fileVersion = temp->fileVersion;
         newFile->next = nullptr;
         curr->next = newFile;
-		//cout << temp << endl;
 		temp = temp->next;
 		curr = curr->next;
     } // end deep copy
 
 	cout << "This is commit number: " <<  commitHead->commitNumber << endl;
 	checkHead = commitHead;
-	//cout << commitHead->fileHead << endl;
-	//cout << commitHead->fileHead->fileName << endl;
-	//cout << commitHead->prev->fileHead << endl;
-	//cout << commitHead->prev->fileHead->fileName << endl;
-
-    // traverse singly list
-    // for all files, check wether the fileVersion exists
-        // if exists
-            // check for changes against correct fileVersion
-            // If unchanged do nothing
-            // If changed copy the file from curr directory to git directory 
-                //and update version # (named appropriately)
-        // if not exists 
-            // copy file from current directory into .minigit directory
-            // filename should include the fileVersion correctly
-    // Create a new doubly linked list node 
-        // do a deep copy of the SLL from the prev node
-        // increment commit #
-
-    // deep copy
 } // end commit
-// fileName = f1.txt -> .miniGit/f1.txt01 (.version)
+
 
