@@ -30,7 +30,6 @@ void miniGit::printSingly(){
 	} // end while
 } // end print
 
-
 void miniGit::init(){
   commitHead = new doublyNode;
   commitHead->next = nullptr;
@@ -43,9 +42,9 @@ void miniGit::init(){
 //some helper functions
 string getFileName(){
     string name;
-    //cin.ignore(numeric_limits<streamsize>::max(), '\n'); // this caused problems
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // this caused problems
     getline (cin, name);
-	cout << "string: " << name << endl;
+	//cout << "string: " << name << endl;
     return name;
 } // end getFileName
 
@@ -104,14 +103,14 @@ void miniGit::addFile(){
 		} else if (fileName == "cancel"){
 				return;
         } else {
-            cout << "File doesn't exist" << endl;
+            cout << "File doesn't exist" << endl << endl;
+			cout << "Please press ENTER before typing your next attempt." << endl;
 			addFile();
-        }
+        } // end else if
 	// this is only creating the node.
 	// not actually creating the file
     return;
     }
-
 } // end addfile
 
 void miniGit::removeFile(){
@@ -204,7 +203,6 @@ void miniGit::checkOut(){
 	// DISALLOW ALL OPERATIONS IF COMMIT NUMBERS DIFFER
 	// compare doubly heads ("checkhead")
 
-
 	cout << "WARNING: The checkout function will overwrite local changes." << endl;
 	cout << "Please enter '-1' to return to safety" << endl;
 	cout << "Please enter a commit number" << endl;
@@ -214,6 +212,10 @@ void miniGit::checkOut(){
 
 	if(commitNumber > commitHead->commitNumber || commitNumber < 1){
 		//cout << "You were an idiot" << endl; // fix this for submission
+		if(commitNumber == -1) {
+			cout << endl << "Returning to safety" << endl;
+			return;
+		}
 		cout << "Please enter a valid commit number and try again." << endl; // fix this for submission
 		return;
 	} else {
@@ -243,6 +245,11 @@ void miniGit::checkOut(){
 } // end checkOut
 
 void miniGit::commit(){
+	
+	if(commitHead->fileHead == nullptr) {
+		cout << "Please add a file before committing" << endl;
+		return;
+	}
 
 	if(checkHead != commitHead) {
 		cout << "You have checked out an old version" << endl;
