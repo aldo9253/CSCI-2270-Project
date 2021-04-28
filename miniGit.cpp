@@ -13,7 +13,7 @@ using namespace std;
 namespace fs = filesystem;
 
 miniGit::miniGit(){
-  fs::remove_all(".miniGit");
+  fs::remove_all(".miniGit"); // remove any old instance of the repository
   fs::create_directory(".miniGit");
 } // end constructor
 
@@ -42,7 +42,7 @@ void miniGit::init(){
 //some helper functions
 string getFileName(){
     string name;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');  // this line creates the double enter feature
     getline (cin, name);
 	//cout << "string: " << name << endl;
     return name;
@@ -54,7 +54,6 @@ string getCommitNum(){
     getline (cin, name);
     return name;
 } // end getcommitnum
-
 
 bool isNumber(const string& str){ // checks if a string is a number, used in checkout to make sure we get valid entry
     for (int i = 0; i < str.length(); i++) {
@@ -71,7 +70,6 @@ bool fileExist(string fileName){
     else
         return false;
 } // end fileExist
-
 
 void miniGit::addFile(){
 	// version check
@@ -91,7 +89,7 @@ void miniGit::addFile(){
 		string fileName;
         fileName = getFileName();
         singlyNode * curr = commitHead->fileHead;
-        while (curr!=0)
+        while (curr!=0) //nullptr
         {
             if(curr->fileName == fileName)
             {
@@ -108,7 +106,7 @@ void miniGit::addFile(){
             newFile->next = commitHead->fileHead;   
             commitHead->fileHead = newFile;         
 			cout << "File node succesfully added" << endl;
-		} else if (fileName == "cancel"){
+		} else if (fileName == "cancel"){ // this is an extra feature
 				return;
         } else {
             cout << "File doesn't exist" << endl << endl;
@@ -139,13 +137,14 @@ void miniGit::removeFile(){
   	else
   	{
     	singlyNode* curr = commitHead->fileHead;
-    	singlyNode* prev = 0;
+    	singlyNode* prev = 0; // nullptr
     	while (curr != 0)
     	{
       	if (curr->fileName == fileName) {
-        	if (prev !=0) {
+        	if (prev != 0) {
           		prev->next = curr->next;
           		delete curr;
+				cout << "File node succesfully removed" << endl;
           		return;
         	} else {
 				commitHead->fileHead = curr->next;
@@ -178,9 +177,9 @@ void file_copy(string f1name, string f2name) {
 	while(1) {
     	c1 = f1.get();
     	if(c1 == EOF) {
-      		break;
     		f1.close();
     		f2.close();
+      		break;
     	} // end if
   		f2 << c1;
 	} // end while
@@ -208,7 +207,6 @@ bool is_equal(string f1name, string f2name) {
 
 void miniGit::checkOut(){
 
-
 	cout << "WARNING: The checkout function will overwrite local changes." << endl;
 	cout << "Please enter '-1' to return to safety" << endl;
 	cout << "Please enter a commit number" << endl;
@@ -219,7 +217,7 @@ void miniGit::checkOut(){
 		return;
 	}
 	int commitNumber = stoi(commitNum);
-	cout << "commit # " << commitNumber << endl;
+	cout << "Commit # " << commitNumber << endl;
 
 	if(commitNumber > commitHead->commitNumber || commitNumber < 1){
 		if(commitNumber == -1) {
@@ -230,7 +228,7 @@ void miniGit::checkOut(){
 		return;
 	} else {
 		checkHead = commitHead;
-		while(checkHead->commitNumber >= 0) {
+		while(checkHead->commitNumber >= 1) {
 			if(checkHead->commitNumber == commitNumber)
 					break; // if version is correct, leave loop
 			checkHead = checkHead->prev;
@@ -256,7 +254,7 @@ void miniGit::commit(){
 	if(commitHead->fileHead == nullptr) {
 		cout << "Please add a file before committing" << endl;
 		return;
-	}
+	} // end if
 
 	if(checkHead != commitHead) {
 		cout << "You have checked out an old version" << endl;
@@ -300,7 +298,7 @@ void miniGit::commit(){
 
 	// this section (if & while) copy the corresponding singlylist	
 	if(temp != nullptr){ // if the old commithead has a file
-		curr = commitHead->fileHead;
+		curr = commitHead->fileHead; // new fileHead pointer
         singlyNode* newFile = new singlyNode();
         newFile->fileName = temp->fileName;
         newFile->fileVersion = temp->fileVersion;
